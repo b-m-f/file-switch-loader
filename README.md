@@ -1,5 +1,10 @@
 # Webpack file switch loader
 
+Install with
+```
+npm i -D file-switch-loader
+```
+
 This loader can change the file that content is being loaded from while the bundling is happening.
 
 Use cases can be a multi-tenant repository, AB testing or whenever you would like to switch out parts of your component tree based on a configuration object and their filenames.
