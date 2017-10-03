@@ -45,3 +45,7 @@ The loader will now check if files with a `b` between **filename** and **extensi
 ## Cool stuff
 You can just pass in the `version` via a parameter when starting webpack or have it in an `ENV` variable.
 This way you can quickly build and release different versions of your App/Site.
+
+
+# Dependencies
+This was tested with **node 8.6.0** but should work as long your node version supports `const` and string interpolation. 
