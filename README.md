@@ -12,6 +12,7 @@ Use cases can be a multi-tenant repository, AB testing or whenever you would lik
 
 ## Example
 ### webpack.config.js
+The loader has to be the last in the array
 ```javascript
   module: {
     rules: [
