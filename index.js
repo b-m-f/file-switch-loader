@@ -8,13 +8,14 @@ module.exports = function(content) {
 };
 
 module.exports.pitch = function(remainingRequest, precedingRequest, data) {
-  if (this.resourcePath.includes('node_modules')) {
+  if (this.resourcePath.includes('node_modules') || !this.query.version) {
     return (
       'module.exports = require(' +
       JSON.stringify('-!' + remainingRequest) +
       ');'
     );
   }
+
   const splitPath = this.resourcePath.split('/');
   const path = splitPath.slice(0, -1).join('/');
   const file = splitPath[splitPath.length - 1];
