@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 
 module.exports = function(content) {
   if (this.data.newPath) {
@@ -16,18 +17,11 @@ module.exports.pitch = function(remainingRequest, precedingRequest, data) {
     );
   }
 
-  const splitPath = this.resourcePath.split('/');
-  const path = splitPath.slice(0, -1).join('/');
-  const file = splitPath[splitPath.length - 1];
-
-  const splitFile = file.split('.');
-  const fileEnding = splitFile[splitFile.length - 1];
-  //skip last element and join the rest back together
-  const fileWithoutEnding = splitFile.slice(0, -1).join('.');
   const version = this.query.version;
-  const versionFilePath = `${path}/${fileWithoutEnding}.${version}.${fileEnding}`;
+  const parsedResource = path.parse(this.resourcePath);
+  const newPath = `${parsedResource.dir}/${parsedResource.name}.${version}${parsedResource.ext}`;
 
-  if (fs.existsSync(versionFilePath)) {
-    data.newPath = versionFilePath;
+  if (fs.existsSync(newPath)) {
+    data.newPath = newPath;
   }
 };
