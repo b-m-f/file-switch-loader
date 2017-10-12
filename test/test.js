@@ -1,4 +1,5 @@
 const assert = require('assert');
+const path = require('path');
 const loader = require('../index');
 
 const getModuleRequireFromTemplate = module =>
@@ -26,6 +27,28 @@ describe('file-switcher-loader', () => {
         loader.pitch.apply(thisContext, [requestedResource, '', {}]),
         getModuleRequireFromTemplate(requestedResource),
       );
+    });
+    describe('data object', () => {
+      it('should have an empty newPath if no file for rewrite is found', () => {
+        const resourcePath = path.resolve('./test/testFile.js');
+        const requestedResource = 'testFile.js';
+        const thisContext = {resourcePath, query: {}};
+        const data = {};
+
+        loader.pitch.call(thisContext, requestedResource, '', data);
+
+        assert.equal(data.newPath, undefined);
+      });
+      it('should have a newPath set if a file for rewrite is found', () => {
+        const resourcePath = path.resolve('./test/testFile.js');
+        const requestedResource = 'testFile.js';
+        const thisContext = {resourcePath, query: {version: 2}};
+        const data = {};
+
+        loader.pitch.call(thisContext, requestedResource, '', data);
+
+        assert.equal(data.newPath, path.resolve('./test/testFile.2.js'));
+      });
     });
   });
 });

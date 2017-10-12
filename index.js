@@ -26,6 +26,7 @@ module.exports.pitch = function(remainingRequest, precedingRequest, data) {
   const fileWithoutEnding = splitFile.slice(0, -1).join('.');
   const version = this.query.version;
   const versionFilePath = `${path}/${fileWithoutEnding}.${version}.${fileEnding}`;
+
   if (fs.existsSync(versionFilePath)) {
     data.newPath = versionFilePath;
   }
