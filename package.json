@@ -1,6 +1,6 @@
 {
   "name": "file-switch-loader",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description":
     "Webpack loader to switch the file where content should be loaded from during bundling.",
   "main": "index.js",
