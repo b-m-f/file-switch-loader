@@ -1,6 +1,9 @@
 const assert = require('assert');
 const path = require('path');
+const fs = require('fs');
 const loader = require('../index');
+
+const testFilePath = path.resolve('./test/testFile.2.js');
 
 const getModuleRequireFromTemplate = module =>
   `module.exports = require("-!${module}");`;
@@ -35,7 +38,7 @@ describe('file-switcher-loader', () => {
         const thisContext = {resourcePath, query: {}};
         const data = {};
 
-        loader.pitch.call(thisContext, requestedResource, '', data);
+        loader.pitch.apply(thisContext, [requestedResource, '', data]);
 
         assert.equal(data.newPath, undefined);
       });
@@ -45,10 +48,29 @@ describe('file-switcher-loader', () => {
         const thisContext = {resourcePath, query: {version: 2}};
         const data = {};
 
-        loader.pitch.call(thisContext, requestedResource, '', data);
+        loader.pitch.apply(thisContext, [requestedResource, '', data]);
 
-        assert.equal(data.newPath, path.resolve('./test/testFile.2.js'));
+        assert.equal(data.newPath, testFilePath);
       });
+    });
+  });
+  describe('main method', () => {
+    it('should return unchanged content if no new path is supplied', () => {
+      const data = {};
+      const thisContext = {data};
+      const content = 'const hello = 4;';
+      const loaderOutput = loader.call(thisContext, [content]);
+
+      assert.equal(loaderOutput, content);
+    });
+    it('should return changed content if new path is supplied', () => {
+      const data = {newPath: testFilePath};
+      const thisContext = {data};
+      const content = 'const hello = 4;';
+      const loaderOutput = loader.apply(thisContext, [content]);
+      const newContent = fs.readFileSync(testFilePath, 'utf8');
+
+      assert.equal(loaderOutput, newContent);
     });
   });
 });
